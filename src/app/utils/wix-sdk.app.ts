@@ -1,6 +1,7 @@
 import { AppStrategy } from '@wix/sdk/auth/wix-app-oauth';
 import { createClient } from '@wix/sdk/client';
 import { shippingRates } from '@wix/ecom/service-plugins';
+import { orders } from '@wix/ecom';
 
 export const wixAppClient = createClient({
   auth: AppStrategy({
@@ -8,5 +9,5 @@ export const wixAppClient = createClient({
     appSecret: process.env.WIX_APP_SECRET!,
     publicKey: process.env.WIX_APP_JWT_KEY,
   }),
-  modules: { shippingRates },
+  modules: { shippingRates, orders },
 });

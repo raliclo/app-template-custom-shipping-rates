@@ -33,7 +33,16 @@ export async function getLastOrders({ accessToken }: { accessToken: string }): P
       );
     })
     .catch((e) => {
-      console.error('Failed to fetch orders.ts: ', e);
+      const errorCode = e?.details?.applicationError?.code;
+      if (errorCode === 'READ_ORDER_FORBIDDEN') {
+        console.error(
+          'Permission denied: Your app does not have permission to read orders. ' +
+          'Please ensure "ecom.orders" scope is granted in your Wix App Dashboard settings.',
+          e
+        );
+      } else {
+        console.error('Failed to fetch orders: ', e);
+      }
       return [];
     });
 }

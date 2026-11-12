@@ -10,7 +10,7 @@ import { WixPageId } from '@/app/utils/navigation.const';
 import { useSetShippingAppData, useShippingAppData } from '@/app/client-hooks/app-data';
 import testIds from '@/app/utils/test-ids';
 
-export const ShippingRatesPageContent = ({}: {}) => {
+export const ShippingRatesPageContent = ({ }: {}) => {
   const {
     dashboard: { showToast, navigate },
   } = useSDK();
@@ -87,7 +87,7 @@ export const ShippingRatesPageContent = ({}: {}) => {
               { id: WixPageId.MANAGE_APPS, value: 'Apps' },
               { id: 'shipping-app-page', value: 'Shipping Rate App', disabled: true },
             ]}
-            onClick={({ id }) => navigate(id as string)}
+            onClick={({ id }) => navigate?.(id as string)}
           />
         }
         title='Shipping Rate App'
