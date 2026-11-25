@@ -2,6 +2,9 @@
   "name": "@wix/app-template-custom-shipping-rates",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": ">=26"
+  },
   "scripts": {
     "e2e": "npx playwright test",
     "e2e:update": "npx playwright test --update-snapshots",
