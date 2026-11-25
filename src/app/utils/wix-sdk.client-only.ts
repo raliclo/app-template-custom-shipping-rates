@@ -6,7 +6,7 @@ import { createClient } from '@wix/sdk/client';
 function inIframe() {
   try {
     return window.self !== window.top;
-  } catch (e) {
+  } catch {
     return true;
   }
 }
@@ -26,7 +26,7 @@ export const useSDK = () => {
               dashboard,
             },
           }),
-    [typeof window],
+    [],
   );
   return sdk;
 };

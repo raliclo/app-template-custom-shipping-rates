@@ -18,7 +18,7 @@ test.describe('Dashboard Page', () => {
   test('look and feel - expand express method', async ({ page }) => {
     await openDashboard(page);
 
-    const [_, expressMethod] = await page.getByTestId(testIds.DASHBOARD.SHIPPING_METHOD).all();
+    const [, expressMethod] = await page.getByTestId(testIds.DASHBOARD.SHIPPING_METHOD).all();
 
     // expand
     await expressMethod.getByTestId(testIds.DASHBOARD.SHIPPING_METHOD_EXPAND).click();

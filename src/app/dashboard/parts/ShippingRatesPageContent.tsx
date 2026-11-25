@@ -1,7 +1,7 @@
 'use client';
 import { Box, Breadcrumbs, Button, Cell, Layout, Loader, Page } from '@wix/design-system';
 import { useSDK } from '@/app/utils/wix-sdk.client-only';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { ActivationDetailsCard } from '@/app/dashboard/parts/ActivationDetailsCard';
 import { ShippingDeliveryMethodForm } from '@/app/dashboard/parts/ShippingDeliveryMethodForm';
 import { ShippingAppData, ShippingCosts, ShippingUnitOfMeasure } from '@/app/types/app-data.model';
@@ -10,84 +10,92 @@ import { WixPageId } from '@/app/utils/navigation.const';
 import { useSetShippingAppData, useShippingAppData } from '@/app/client-hooks/app-data';
 import testIds from '@/app/utils/test-ids';
 
-export const ShippingRatesPageContent = ({}: {}) => {
+export const ShippingRatesPageContent = () => {
   const {
     dashboard: { showToast, navigate },
   } = useSDK();
   const persistShippingAppData = useSetShippingAppData();
   const { data: persistedShippingAppData, isLoading: isLoadingAppData } = useShippingAppData();
-  const [currentShippingAppData, setCurrentShippingAppData] = useState<ShippingAppData | undefined>(
-    persistedShippingAppData,
-  );
-  useEffect(() => {
-    setCurrentShippingAppData(persistedShippingAppData);
-  }, [persistedShippingAppData]);
+  const [draftShippingAppData, setDraftShippingAppData] = useState<ShippingAppData | undefined>(undefined);
+  const currentShippingAppData = draftShippingAppData ?? persistedShippingAppData;
 
   const [loading, setLoading] = useState(false);
   const onSave = useCallback(() => {
+    if (!currentShippingAppData || loading) {
+      return;
+    }
     setLoading(true);
-    persistShippingAppData(currentShippingAppData!)
+    persistShippingAppData(currentShippingAppData)
       .then(() => {
-        showToast({
+        setDraftShippingAppData(undefined);
+        showToast?.({
           message: 'Shipping rates saved successfully.',
           type: 'success',
         });
       })
       .catch(() => {
-        showToast({
+        showToast?.({
           message: 'Failed to save shipping rates.',
           type: 'error',
         });
       })
       .finally(() => setLoading(false));
-  }, [persistShippingAppData, currentShippingAppData, showToast]);
+  }, [persistShippingAppData, currentShippingAppData, loading, showToast]);
   const setUomForMethod = useCallback(
     (code: string) => (type: ShippingUnitOfMeasure) => {
-      setCurrentShippingAppData({
-        ...currentShippingAppData,
-        shippingMethods: currentShippingAppData!.shippingMethods.map((m) =>
-          m.code === code ? { ...m, unitOfMeasure: type } : m,
-        ),
+      setDraftShippingAppData((prev) => {
+        const base = prev ?? persistedShippingAppData;
+        return base
+          ? {
+              ...base,
+              shippingMethods: base.shippingMethods.map((m) => (m.code === code ? { ...m, unitOfMeasure: type } : m)),
+            }
+          : base;
       });
     },
-    [currentShippingAppData],
+    [persistedShippingAppData],
   );
   const setCostsForMethod = useCallback(
     (code: string) => (costs: ShippingCosts) => {
-      setCurrentShippingAppData({
-        ...currentShippingAppData,
-        shippingMethods: currentShippingAppData!.shippingMethods.map((m) => (m.code === code ? { ...m, costs } : m)),
+      setDraftShippingAppData((prev) => {
+        const base = prev ?? persistedShippingAppData;
+        return base
+          ? {
+              ...base,
+              shippingMethods: base.shippingMethods.map((m) => (m.code === code ? { ...m, costs } : m)),
+            }
+          : base;
       });
     },
-    [currentShippingAppData],
+    [persistedShippingAppData],
   );
-  const ButtonsBar = useCallback(
-    () => (
-      <Box gap='SP2'>
-        <Button
-          skin='standard'
-          priority='secondary'
-          onClick={() => setCurrentShippingAppData(persistedShippingAppData)}
-        >
-          Cancel
-        </Button>
-        <Button onClick={onSave}>{loading ? <Loader size='tiny' /> : 'Save'}</Button>
-      </Box>
-    ),
-    [loading, onSave, persistedShippingAppData],
+  const actionsBar = (
+    <Box gap='SP2'>
+      <Button
+        skin='standard'
+        priority='secondary'
+        disabled={loading}
+        onClick={() => setDraftShippingAppData(undefined)}
+      >
+        Cancel
+      </Button>
+      <Button disabled={loading || !currentShippingAppData} onClick={onSave}>
+        {loading ? <Loader size='tiny' /> : 'Save'}
+      </Button>
+    </Box>
   );
   return (
     <Page height='100vh' dataHook={testIds.DASHBOARD.WRAPPER}>
       <Page.Header
-        actionsBar={<ButtonsBar />}
+        actionsBar={actionsBar}
         breadcrumbs={
           <Breadcrumbs
-            activeId='2'
+            activeId='shipping-app-page'
             items={[
               { id: WixPageId.MANAGE_APPS, value: 'Apps' },
               { id: 'shipping-app-page', value: 'Shipping Rate App', disabled: true },
             ]}
-            onClick={({ id }) => navigate(id as string)}
+            onClick={({ id }) => navigate?.(id as string)}
           />
         }
         title='Shipping Rate App'

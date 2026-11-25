@@ -14,10 +14,10 @@ export async function getLastOrders({ accessToken }: { accessToken: string }): P
     isTestingToken(accessToken)
       ? (await import('@/app/utils/mocks-server')).getTestOrders()
       : sdk.orders.searchOrders({
-        cursorPaging: {
-          limit: 3,
-        },
-      })
+          cursorPaging: {
+            limit: 3,
+          },
+        })
   )
     .then((res) => {
       return (
@@ -26,7 +26,7 @@ export async function getLastOrders({ accessToken }: { accessToken: string }): P
             ({
               id: order.number ?? '',
               createdDate: order?._createdDate ?? '',
-              totalPrice: order?.priceSummary?.total?.amount ?? 0,
+              totalPrice: Number(order?.priceSummary?.total?.amount ?? 0),
               currency: order?.currency ?? 'USD',
             }) as OrderSummary,
         ) ?? []

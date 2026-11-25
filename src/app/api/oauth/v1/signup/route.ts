@@ -8,11 +8,11 @@ export async function GET(request: NextRequest) {
   // Store the mapping between instance IDs and refresh tokens in an external database, so you can issue new access tokens by app instance.
   // For further details, read about [Authentication in the documentation](https://dev.wix.com/docs/rest/articles/getting-started/authentication).
 
-  console.log('Received OAuth refresh and access tokens: ', {
-    accessToken,
-    refreshToken,
-    instanceId: instanceId,
+  console.log('Received OAuth tokens for app instance:', {
+    instanceId,
+    hasAccessToken: Boolean(accessToken),
+    hasRefreshToken: Boolean(refreshToken),
   });
 
-  return redirect(`https://www.wix.com/installer/close-window?access_token=${accessToken}`);
+  return redirect(`https://www.wix.com/installer/close-window?access_token=${encodeURIComponent(accessToken)}`);
 }

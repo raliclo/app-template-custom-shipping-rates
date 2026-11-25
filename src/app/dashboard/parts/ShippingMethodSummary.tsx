@@ -1,3 +1,4 @@
+'use client';
 import { Box, Card, Divider, Text, TextButton, SkeletonLine } from '@wix/design-system';
 import { ArrowRight } from '@wix/wix-ui-icons-common';
 import { useSDK } from '@/app/utils/wix-sdk.client-only';
@@ -21,9 +22,9 @@ export function ShippingMethodSummary() {
         <Box direction='vertical' paddingBottom='SP3'>
           {isLoading || orders?.length ? (
             (isLoading ? [null, null, null] : orders!).map((order, index) => (
-              <React.Fragment key={index}>
+              <React.Fragment key={order?.id ?? index}>
                 {index > 0 && <Divider skin='light' />}
-                <Box key={index} verticalAlign='middle' align='space-between' paddingTop='SP2' paddingBottom='SP1'>
+                <Box verticalAlign='middle' align='space-between' paddingTop='SP2' paddingBottom='SP1'>
                   <Box direction='vertical'>
                     {isLoading ? (
                       <>
@@ -68,7 +69,7 @@ export function ShippingMethodSummary() {
           )}
         </Box>
         <Box align='right' paddingTop='SP1'>
-          <TextButton onClick={() => navigate(WixPageId.MANAGE_ORDERS)} size='small' suffixIcon={<ArrowRight />}>
+          <TextButton onClick={() => navigate?.(WixPageId.MANAGE_ORDERS)} size='small' suffixIcon={<ArrowRight />}>
             See all orders
           </TextButton>
         </Box>

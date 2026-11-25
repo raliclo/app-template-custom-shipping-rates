@@ -2,7 +2,7 @@
 
 The Custom Shipping Rates app template is part of the [Wix app templates collection](https://dev.wix.com/apps-templates).
 
-This [Next.js 14](https://nextjs.org/) template demos a simple shipping solution, is fully customizable and sets a foundation for developing self-hosted Wix apps. It takes care of webhooks and OAuth, implements a Wix SPI and features a pre-built dashboard page, designed with the Wix Design System and built with the Wix Dashboard SDK.
+This [Next.js 16](https://nextjs.org/) template demos a simple shipping solution, is fully customizable and sets a foundation for developing self-hosted Wix apps. It takes care of webhooks and OAuth, implements a Wix SPI and features a pre-built dashboard page, designed with the Wix Design System and built with the Wix Dashboard SDK.
 
 The template handles common app functionalities, laying the groundwork for further customization and development.
 
@@ -30,7 +30,7 @@ This Wix app template incorporates the following features:
 
 Before getting started, make sure you have the following set up:
 
-+ [Node.js](https://nodejs.org/en/) (v18.16.0 or higher).
++ [Node.js](https://nodejs.org/en/) (v20.9.0 or higher; v22 LTS recommended).
 + A [Wix developer account](https://users.wix.com/signin?loginDialogContext=signup&referralInfo=HEADER&postLogin=https:%2F%2Fdev.wix.com%2Fdc3%2Fmy-apps&postSignUp=https:%2F%2Fdev.wix.com%2Fdc3%2Fmy-apps&forceRender=true).
 
 
@@ -148,11 +148,11 @@ While developing your app, you may also wish to deploy and test it locally. You 
 
     ```env
     # App ID and App Secret Key: Retrieve from the OAuth page in the app's dashboard in the App Dashboard.
-    APP_ID=<APP_ID>
-    APP_SECRET=<APP_SECRET KEY>
+    WIX_APP_ID=<WIX_APP_ID>
+    WIX_APP_SECRET=<WIX_APP_SECRET>
 
     # App Public Key: Retrieve from the Webhooks page in the app's dashboard in the App Dashboard.
-    WEBHOOK_PUBLIC_KEY="<APP_WEBHOOK_PUBLIC_KEY>"
+    WIX_APP_JWT_KEY="<WIX_APP_JWT_KEY>"
     ```
 
     **Note:** Always keep your `.env.local` secure and never commit it to version control. This file contains sensitive keys that should not be exposed publicly.

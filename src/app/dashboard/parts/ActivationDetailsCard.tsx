@@ -1,3 +1,4 @@
+'use client';
 import { useSDK } from '@/app/utils/wix-sdk.client-only';
 import { Box, Card, Text, TextButton } from '@wix/design-system';
 import { WixPageId } from '@/app/utils/navigation.const';
@@ -17,7 +18,7 @@ export function ActivationDetailsCard() {
             <ol style={{ marginBottom: '0' }}>
               <li style={{ marginBottom: '0', marginLeft: '24px' }}>
                 Go to the{' '}
-                <TextButton onClick={() => navigate(WixPageId.SHIPPING_INFO)}>
+                <TextButton onClick={() => navigate?.(WixPageId.SHIPPING_INFO)}>
                   Shipping and Delivery Settings
                 </TextButton>{' '}
                 dashboard page.

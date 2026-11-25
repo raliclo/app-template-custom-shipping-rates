@@ -23,7 +23,7 @@ jobs:
       proceed: ${{ steps.should_run.outputs.proceed }}
       site_name: ${{ steps.should_run.outputs.site_name }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Preliminary checks
         id: should_run
         env:
@@ -47,13 +47,13 @@ jobs:
     timeout-minutes: 20
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: 'npm'
       - name: Install dependencies
-        run: npm install
+        run: npm ci
       - uses: ./.github/actions/setup-playwright
       - name: Set Run with URL
         run: |

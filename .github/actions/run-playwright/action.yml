@@ -22,7 +22,7 @@ outputs:
 runs:
   using: "composite"
   steps:
-    - name: Run E2E Tests on Netlify URL
+    - name: Run E2E Tests
       id: playwright-e2e
       run: |
         if [[ "${{ inputs.shouldUpdateBaseline }}" == "true" ]]; then
@@ -33,21 +33,21 @@ runs:
       shell: bash
       env:
         PLAYWRIGHT_TEST_BASE_URL: ${{ inputs.provider-deployment-url }}
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       id: playwright-report-artifact
       if: always()
       with:
         name: playwright-report-${{ inputs.provider }}
         path: playwright-report/
         retention-days: 10
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       id: playwright-screenshots-artifact
       if: always()
       with:
         name: screenshots-${{inputs.provider}}
         path: tests/e2e/__screenshots__/${{inputs.provider}}
         retention-days: 10
-    - uses: actions/github-script@v6
+    - uses: actions/github-script@v7
       if: always()
       with:
         github-token: ${{ inputs.githubToken }}
@@ -102,20 +102,20 @@ runs:
                   summary: `e2e ${provider}: ${conclusion}`,
                 },
               };
-              github.rest.checks.update(checkInput).catch((error) => {
+              await github.rest.checks.update(checkInput).catch((error) => {
                 console.warn('Error updating check:', error, ' flow continues');
               });
             }
 
             const artifactLinks = [
               `## ${conclusion === 'success' ? ':green_circle:' : ':red_circle:'} Playwright E2E for ${provider.toUpperCase()}`,
-              `| Name | Info  |`,
+              `| Name | Info  |`,
               `|------|---------|`,
               `| Summary | [Action Summary](https://github.com/${contextOwner}/${contextRepo}/actions/runs/${runId}/) |`,
               `| Site URL | [${deploymentUrl}](${deploymentUrl}) |`,
             ];
             const comment = artifactLinks.join('\n');
-            github.rest.issues.createComment({
+            await github.rest.issues.createComment({
               owner: contextOwner,
               repo: contextRepo,
               issue_number: pullRequest.data.number,
@@ -127,8 +127,8 @@ runs:
     - name: Commit and Push Updated Screenshots if defined
       if: inputs.shouldUpdateBaseline == 'true'
       run: |
-        git config --global user.email ${{inputs.actor}}
-        git config --global user.name "actions@users.noreply.github.com"
+        git config --global user.name "${{ inputs.actor }}"
+        git config --global user.email "actions@users.noreply.github.com"
         git add tests/e2e/__screenshots__/${{inputs.provider}}/*
         git commit -m "Update baseline screenshots for ${{inputs.provider}}"
         git push

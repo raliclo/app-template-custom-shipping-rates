@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+'use client';
+import { useState } from 'react';
 import { Box, Card, Cell, Collapse, Dropdown, FormField, Input, Layout, Text, TextButton } from '@wix/design-system';
 import { ChevronDown, ChevronUp } from '@wix/wix-ui-icons-common';
 import { ShippingCosts, ShippingMethodType, ShippingUnitOfMeasure } from '@/app/types/app-data.model';

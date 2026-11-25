@@ -26,7 +26,7 @@ export const useSetShippingAppData = () => {
       const accessToken = (await accessTokenPromise)!;
       return setShippingAppData(newData, { accessToken });
     },
-    onSuccess: (data) => {
+    onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey });
     },
   });

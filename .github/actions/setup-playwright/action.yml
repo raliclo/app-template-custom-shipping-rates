@@ -12,7 +12,7 @@ runs:
       shell: bash
     - name: Cache Playwright Browsers for Playwright's Version
       id: cache-playwright-browsers
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: ~/.cache/ms-playwright
         key: playwright-browsers-${{ steps.store-playwright-version.outputs.PLAYWRIGHT_VERSION }}
